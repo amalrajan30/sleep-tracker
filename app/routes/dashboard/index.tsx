@@ -45,20 +45,20 @@ export default function Dashboard() {
       </div>
 
       <div className="mt-8 grid grid-cols-dashboard grid-rows-dashboard gap-4">
-        <div className="bg-white col-start-1 col-end-2 row-span-4 shadow-xl rounded">
+        <div className="bg-white col-start-1 col-end-2 row-span-2 shadow-xl rounded">
           <Table />
         </div>
-        <div className="bg-white shadow-xl p-4 rounded">
+        {/* <div className="bg-white shadow-xl p-4 rounded">
           <InfoCard value="6 hrs" title="Avg Sleep Time" />
         </div>
         <div className="bg-white shadow-xl p-4 rounded">
           <InfoCard value="06:00" title="Avg Wake Up Time" />
-        </div>
-        <div className="bg-white col-span-2 p-4 h-72 shadow-xl rounded">
+        </div> */}
+        <div className="bg-white col-span-1 p-4 h-72 shadow-xl rounded">
           <h3 className="font-bold text-xl">Sleep Duration</h3>
           <Graph />
         </div>
-        <div className="bg-white col-span-2 p-4 row-span-2 shadow-xl rounded">
+        <div className="bg-white col-span-1 p-4 row-span-1 shadow-xl rounded">
           <h3 className="font-bold text-xl">Additional Infos</h3>
           <Summary />
         </div>

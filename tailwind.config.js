@@ -8,10 +8,10 @@ module.exports = {
         header: '50px',
       },
       gridTemplateColumns: {
-        dashboard: '64% 1fr 1fr',
+        dashboard: '64% 1fr',
       },
       gridTemplateRows: {
-        dashboard: '6rem',
+        dashboard: '1fr 1fr',
       },
     },
   },

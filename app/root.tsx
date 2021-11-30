@@ -75,25 +75,9 @@ function Document({ children, title }: { children: React.ReactNode; title?: stri
 function Layout({ children }: React.PropsWithChildren<{}>) {
   return (
     <div className="flex overflow-hidden h-screen">
-      {/* <div className="w-64 bg-indigo-800 flex flex-col">
-        <div className="h-12 flex items-center justify-center">
-          <Link to="/">
-            <h1 className="font-bold text-xl text-white">Sleep Tracker</h1>
-          </Link>
-        </div>
-        <nav className="flex justify-center text-gray-300 opacity-70 font-semibold mt-4">
-          <ul className="w-full text-center">
-            <li className="h-10 flex">
-              <button className="hover:bg-indigo-600 hover:text-white w-full font-semibold">
-                Dashboard
-              </button>
-            </li>
-          </ul>
-        </nav>
-      </div> */}
       <Sidebar />
       <div className="overflow-hidden h-full w-full">
-        <header className="flex justify-end items-center w-full h-12 pr-6 shadow">
+        <header className="flex justify-end items-center w-full h-12 pr-6 shadow-xl">
           <span className="mr-4">
             <MdDarkMode className="w-6 overflow-hidden h-6 rounded-full" />
           </span>
@@ -101,7 +85,7 @@ function Layout({ children }: React.PropsWithChildren<{}>) {
             <img src="https://avatars.dicebear.com/api/adventurer/test.svg" alt="avatar" />
           </span>
           <span>
-            <p className="font-semibold">Kent</p>
+            <p className="font-semibold">SomeReallyLongName!</p>
           </span>
         </header>
         <div className="bg-gray-200 p-6 overflow-y-scroll" style={{ height: 'calc(100% - 3rem)' }}>
