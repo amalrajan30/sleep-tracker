@@ -1,6 +1,5 @@
 import * as React from 'react'
 import {
-  Link,
   Links,
   LiveReload,
   Meta,
@@ -9,30 +8,30 @@ import {
   ScrollRestoration,
   useCatch,
   useLocation,
+  useLoaderData,
 } from 'remix'
-import type { LinksFunction } from 'remix'
+import type { LinksFunction, LoaderFunction } from 'remix'
 import { IconContext } from 'react-icons'
 import { MdDarkMode } from 'react-icons/md'
 import styles from './styles/app.css'
 import { Sidebar } from './components/sidebar'
+import { getUserSession } from './utils/session.server'
 
-/**
- * The `links` export is a function that returns an array of objects that map to
- * the attributes for an HTML `<link>` element. These will load `<link>` tags on
- * every route in the app, but individual routes can include their own links
- * that are automatically unloaded when a user navigates away from the route.
- *
- * https://remix.run/api/app#links
- */
 export let links: LinksFunction = () => {
   return [{ rel: 'stylesheet', href: styles }]
 }
 
-/**
- * The root module's default export is a component that renders the current
- * route via the `<Outlet />` component. Think of this as the global layout
- * component for your app.
- */
+export const loader: LoaderFunction = async ({ request }) => {
+  if (request.url.endsWith('/dashboard')) {
+    const session = await getUserSession(request)
+    if (session.has('name')) {
+      return { name: session.get('name'), avatar: session.get('avatar') }
+    }
+    return { name: 'Guest' }
+  }
+  return null
+}
+
 export default function App() {
   const location = useLocation()
   const [isLoggedIn, setIsLoggedIn] = React.useState(false)
@@ -73,6 +72,7 @@ function Document({ children, title }: { children: React.ReactNode; title?: stri
 }
 
 function Layout({ children }: React.PropsWithChildren<{}>) {
+  const data = useLoaderData()
   return (
     <div className="flex overflow-hidden h-screen">
       <Sidebar />
@@ -81,11 +81,16 @@ function Layout({ children }: React.PropsWithChildren<{}>) {
           <span className="mr-4">
             <MdDarkMode className="w-6 overflow-hidden h-6 rounded-full" />
           </span>
-          <span className="w-10 overflow-hidden h-10 rounded-full mr-1">
-            <img src="https://avatars.dicebear.com/api/adventurer/test.svg" alt="avatar" />
+          <span className="w-7 overflow-hidden h-7 rounded-full mr-2">
+            <img
+              src={
+                data.avatar ? data.avatar : 'https://avatars.dicebear.com/api/adventurer/test.svg'
+              }
+              alt="avatar"
+            />
           </span>
           <span>
-            <p className="font-semibold">SomeReallyLongName!</p>
+            <p className="font-semibold">{data.name}</p>
           </span>
         </header>
         <div className="bg-gray-200 p-6 overflow-y-scroll" style={{ height: 'calc(100% - 3rem)' }}>
