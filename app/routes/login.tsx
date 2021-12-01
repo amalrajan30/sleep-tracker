@@ -1,7 +1,9 @@
 import * as React from 'react'
-import type { MetaFunction } from 'remix'
+import { useSubmit, redirect } from 'remix'
+import type { MetaFunction, ActionFunction, LoaderFunction } from 'remix'
 import { FcGoogle } from 'react-icons/fc'
 import jwtDecode from 'jwt-decode'
+import { createUser, setUserSession, getUserSession } from '~/utils/session.server'
 
 export const meta: MetaFunction = () => {
   return {
@@ -10,12 +12,38 @@ export const meta: MetaFunction = () => {
   }
 }
 
+export const action: ActionFunction = async ({ request }) => {
+  const form = await request.formData()
+  const email = form.get('email')
+  const name = form.get('name')
+  const avatar = form.get('avatar')
+  if (typeof email !== 'string' || typeof name !== 'string' || typeof avatar !== 'string') {
+    return { formError: 'Form not submitted correctly' }
+  }
+  const userId = await createUser(email, name, avatar)
+  return setUserSession(userId, name, avatar)
+}
+
+export const loader: LoaderFunction = async ({ request }) => {
+  const session = await getUserSession(request)
+  if (session.has('userId')) {
+    return redirect('/dashboard')
+  }
+  return null
+}
+
 export default function Login() {
   const [gsiScriptLoaded, setGsiScriptLoaded] = React.useState(false)
+  const submit = useSubmit()
 
   const handleGoogleLogin = (response: any) => {
-    const data = jwtDecode(response.credential)
+    const data = jwtDecode(response.credential) as any
     console.log({ credentials: data })
+    const formData = new FormData()
+    formData.append('email', data.email)
+    formData.append('name', data.name)
+    formData.append('avatar', data.picture)
+    submit(formData, { method: 'post' })
   }
 
   React.useEffect(() => {

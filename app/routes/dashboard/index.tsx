@@ -1,4 +1,4 @@
-import { LinksFunction, ActionFunction } from 'remix'
+import { LinksFunction, ActionFunction, LoaderFunction, redirect } from 'remix'
 import * as React from 'react'
 import { AiOutlinePlus } from 'react-icons/ai'
 import datepickerStyleHref from 'react-datepicker/dist/react-datepicker.css'
@@ -7,6 +7,7 @@ import InfoCard from '~/components/infoCard'
 import Summary from '~/components/summary'
 import Table from '~/components/table'
 import NewEntry from '~/components/newEntry'
+import { getUserSession } from '~/utils/session.server'
 
 export const links: LinksFunction = () => [
   {
@@ -23,6 +24,14 @@ export const action: ActionFunction = async ({ request }) => {
   const body = await request.formData()
   console.log(body)
   return null
+}
+
+export const loader: LoaderFunction = async ({ request }) => {
+  const session = await getUserSession(request)
+  if (session.has('userId')) {
+    return null
+  }
+  return redirect('/login')
 }
 
 export default function Dashboard() {
