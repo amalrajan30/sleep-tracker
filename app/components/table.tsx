@@ -1,35 +1,16 @@
 import * as React from 'react'
 import { useTable } from 'react-table'
-import { GrFormPrevious, GrFormNext } from 'react-icons/gr'
+import leftIcon from '../icons/left.svg'
+import rightIcon from '../icons/right.svg'
+interface TableData {
+  id: string
+  date: string
+  timeOfSleep: string
+  timeOfWake: string
+  sleepDuration: string
+}
 
-export default function Table() {
-  const dummyData = React.useMemo(
-    () => [
-      {
-        id: 1,
-        date: '2020-01-01',
-        timeOfSleep: '10:00',
-        timeOfWakeup: '11:00',
-        sleepDuration: '6 hrs',
-      },
-      {
-        id: 2,
-        date: '2020-01-02',
-        timeOfSleep: '10:00',
-        timeOfWakeup: '11:00',
-        sleepDuration: '6 hrs',
-      },
-      {
-        id: 3,
-        date: '2020-01-03',
-        timeOfSleep: '10:00',
-        timeOfWakeup: '11:00',
-        sleepDuration: '6 hrs',
-      },
-    ],
-    []
-  )
-
+export default function Table({ data }: { data: TableData[] }) {
   const columns = React.useMemo(
     () => [
       {
@@ -42,7 +23,7 @@ export default function Table() {
       },
       {
         Header: 'Time of wakeup',
-        accessor: 'timeOfWakeup',
+        accessor: 'timeOfWake',
       },
       {
         Header: 'Sleep Duration',
@@ -54,14 +35,14 @@ export default function Table() {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({
     //@ts-ignore
     columns,
-    data: dummyData,
+    data,
   })
   return (
     <>
       <div className="h-14 pl-4 border-b-2 border-opacity-40 flex items-center">
         <h3 className="text-lg font-bold">Sleep Stats</h3>
       </div>
-      <div className="flex flex-col justify-between" style={{height: 'calc(100% - 4rem)'}}>
+      <div className="flex flex-col justify-between" style={{ height: 'calc(100% - 4rem)' }}>
         <table className="w-full" {...getTableProps()}>
           <thead className="border-b-2 border-opacity-40 h-10">
             {headerGroups.map((headerGroup) => (
@@ -96,14 +77,16 @@ export default function Table() {
           <div className="text-gray-400 font-semibold">
             <span>Showing </span>
             <Menu onChange={(e) => console.log(e.target.value)} value={10} />
-            <span> of {dummyData.length}</span>
+            <span> of {data.length}</span>
           </div>
           <div className="flex">
-            <button className="bg-white hover:bg-gray-100 text-gray-800 font-bold py-2 px-4 rounded-l flex">
-              <GrFormPrevious className="mr-4" /> Prev
+            <button className="items-center bg-white hover:bg-gray-100 text-gray-800 font-bold py-2 px-4 rounded-l flex">
+              <img src={leftIcon} width={14} className="mr-2" />
+              <span>Prev</span>
             </button>
-            <button className="bg-white hover:bg-gray-100 text-gray-800 font-bold py-2 px-4 rounded-r flex">
-              Next <GrFormNext className="ml-4" />
+            <button className="items-center bg-white hover:bg-gray-100 text-gray-800 font-bold py-2 px-4 rounded-r flex">
+              <span>Next</span>
+              <img src={rightIcon} width={14} className="ml-2" />
             </button>
           </div>
         </div>
