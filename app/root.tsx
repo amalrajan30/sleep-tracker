@@ -11,8 +11,6 @@ import {
   useLoaderData,
 } from 'remix'
 import type { LinksFunction, LoaderFunction } from 'remix'
-import { IconContext } from 'react-icons'
-import { MdDarkMode } from 'react-icons/md'
 import styles from './styles/app.css'
 import { Sidebar } from './components/sidebar'
 import { getUserSession } from './utils/session.server'
@@ -38,15 +36,13 @@ export default function App() {
 
   return (
     <Document>
-      <IconContext.Provider value={{ size: '1.5rem' }}>
-        {location.pathname === '/login' ? (
+      {location.pathname === '/login' ? (
+        <Outlet />
+      ) : (
+        <Layout>
           <Outlet />
-        ) : (
-          <Layout>
-            <Outlet />
-          </Layout>
-        )}
-      </IconContext.Provider>
+        </Layout>
+      )}
     </Document>
   )
 }
@@ -79,18 +75,20 @@ function Layout({ children }: React.PropsWithChildren<{}>) {
       <div className="overflow-hidden h-full w-full">
         <header className="flex justify-end items-center w-full h-12 pr-6 shadow-xl">
           <span className="mr-4">
-            <MdDarkMode className="w-6 overflow-hidden h-6 rounded-full" />
+            {/* <MdDarkMode className="w-6 overflow-hidden h-6 rounded-full" /> */}
           </span>
           <span className="w-7 overflow-hidden h-7 rounded-full mr-2">
             <img
               src={
-                data.avatar ? data.avatar : 'https://avatars.dicebear.com/api/adventurer/test.svg'
+                data && data.avatar
+                  ? data.avatar
+                  : 'https://avatars.dicebear.com/api/adventurer/test.svg'
               }
               alt="avatar"
             />
           </span>
           <span>
-            <p className="font-semibold">{data.name}</p>
+            <p className="font-semibold">Guest</p>
           </span>
         </header>
         <div className="bg-gray-200 p-6 overflow-y-scroll" style={{ height: 'calc(100% - 3rem)' }}>
