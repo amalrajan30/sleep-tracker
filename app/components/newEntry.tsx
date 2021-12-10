@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Form } from 'remix'
 import Dialog from '@reach/dialog'
-import { AiOutlineClose } from 'react-icons/ai'
+import closeIcon from '../icons/close.svg'
 import differenceInHours from 'date-fns/differenceInHours'
 
 type Props = {
@@ -10,48 +10,54 @@ type Props = {
 }
 
 export default function NewEntry({ isOpen, onClose }: Props) {
-  const [sleepTime, setSleepTime] = React.useState<Date | undefined>()
-  const [wakeUpTime, setWakeUpTime] = React.useState<Date | undefined>()
+  const [date, setDate] = React.useState<string | undefined>()
+  const [sleepTime, setSleepTime] = React.useState<string | undefined>()
+  const [wakeUpTime, setWakeUpTime] = React.useState<string | undefined>()
+  const [overNight, setOverNight] = React.useState<string | undefined>()
   const [duration, setDuration] = React.useState('')
 
   React.useEffect(() => {
-    if (sleepTime && wakeUpTime) {
-      setDuration(
-        differenceInHours(new Date(wakeUpTime), new Date(sleepTime), { roundingMethod: 'round' }) +
-          ' hrs'
-      )
+    if (date && sleepTime && wakeUpTime) {
+      const sleepTimeDate = new Date(`${date}T${sleepTime}`)
+      let wakeUpTimeDate = new Date(`${date}T${wakeUpTime}`)
+      if (overNight === 'on') {
+        wakeUpTimeDate = new Date(wakeUpTimeDate.setDate(wakeUpTimeDate.getDate() + 1))
+      }
+      console.log('wakeUpTimeDate', wakeUpTimeDate.toISOString())
+      const duration = differenceInHours(wakeUpTimeDate, sleepTimeDate)
+      if (duration > 0) {
+        setDuration(`${duration}h`)
+      } else {
+        setDuration('')
+      }
     }
-  }, [sleepTime, wakeUpTime])
+  }, [sleepTime, wakeUpTime, overNight, date])
 
   return (
     <Dialog aria-label="new entry form" className="rounded p-0" isOpen={isOpen} onDismiss={onClose}>
       <div className="h-10 flex items-center justify-between border-b-2 p-8 border-gray-100">
         <h1 className="font-bold text-xl">New Entry</h1>
         <button onClick={onClose}>
-          <AiOutlineClose className="h-5 font-bold" />
+          <img src={closeIcon} width={16} />
         </button>
       </div>
       <div className="p-8">
         <Form method="post">
           <InputGroup label="Date" name="date">
-            <input type="date" required={true} name="date" placeholder="Date" />
+            <input
+              type="date"
+              required={true}
+              name="date"
+              onChange={(e) => setDate(e.target.value)}
+              placeholder="Date"
+            />
           </InputGroup>
           <InputGroup label="Sleep Time" name="sleepTime">
             <input
               type="time"
               required={true}
               className="w-full"
-              onChange={(e) =>
-                setSleepTime(
-                  new Date(
-                    2012,
-                    11,
-                    10,
-                    Number(e.target.value.split(':')[0]),
-                    Number(e.target.value.split(':')[1])
-                  )
-                )
-              }
+              onChange={(e) => setSleepTime(e.target.value)}
               name="sleepTime"
               id="sleepTime"
             />
@@ -60,26 +66,38 @@ export default function NewEntry({ isOpen, onClose }: Props) {
             <input
               type="time"
               required={true}
+              disabled={!sleepTime}
+              min={overNight ? '00:00' : sleepTime}
               className="w-full"
-              onChange={(e) =>
-                setWakeUpTime(
-                  new Date(
-                    2012,
-                    11,
-                    10,
-                    Number(e.target.value.split(':')[0]),
-                    Number(e.target.value.split(':')[1])
-                  )
-                )
-              }
+              onChange={(e) => setWakeUpTime(e.target.value)}
               name="wakeUpTime"
               id="wakeUpTime"
             />
           </InputGroup>
 
+          <div className="flex items-center mb-4">
+            <input
+              type="checkbox"
+              name="overnight"
+              id="overnight"
+              onChange={(e) => {
+                setOverNight(e.target.checked ? 'on' : undefined)
+              }}
+            />
+            <label htmlFor="overnight" className="text-gray-700 text-sm font-bold ml-3">
+              Did you sleep overnight?
+            </label>
+          </div>
+
           <InputGroup label="Duration" name="duration">
             <input type="text" name="duration" value={duration} disabled />
           </InputGroup>
+
+          <input
+            type="hidden"
+            name="timezone"
+            value={Intl.DateTimeFormat().resolvedOptions().timeZone}
+          />
 
           <div className="flex justify-end mt-4">
             <input
