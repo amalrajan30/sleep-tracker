@@ -167,27 +167,33 @@ export default function Dashboard() {
   return (
     <main>
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Dashboard</h1>
+        <h1 className="text-2xl font-bold text-black dark:text-gray-200">Dashboard</h1>
         <button
           onClick={open}
-          className="flex items-center bg-indigo-500 hover:bg-indigo-700 p-2 rounded text-white"
+          className="hidden md:flex items-center bg-indigo-500 hover:bg-indigo-700 dark:bg-indigo-700 dark:hover:bg-indigo-900 p-2 rounded text-white"
         >
           <span className="text-white mr-2">
             <img src={addIcon} alt="add" width={16} />
           </span>
           <span>New Entry</span>
         </button>
+        <button
+          onClick={open}
+          className="flex md:hidden z-10 rounded-full w-10 h-10 items-center justify-center absolute bottom-14 right-9 drop-shadow-lg bg-indigo-500 hover:bg-indigo-700 dark:bg-indigo-700 dark:hover:bg-indigo-900 p-2 text-white"
+        >
+          <img src={addIcon} alt="add" width={16} />
+        </button>
       </div>
 
-      <div className="mt-8 grid grid-cols-dashboard grid-rows-dashboard gap-4">
-        <div className="bg-white col-start-1 col-end-2 row-span-2 shadow-xl rounded">
+      <div className="mt-8 dashboard">
+        <div className="bg-white dark:bg-gray-800 text-black dark:text-gray-200 col-start-1 col-end-2 row-span-2 shadow-xl rounded">
           <Table data={generateTableData()} />
         </div>
-        <div className="bg-white col-span-1 p-4 h-72 shadow-xl rounded">
+        <div className="bg-white dark:bg-gray-800 text-black dark:text-gray-200 col-span-1 p-4 h-72 shadow-xl rounded">
           <h3 className="font-bold text-xl">Sleep Duration</h3>
           <Graph data={generateGraphData()} />
         </div>
-        <div className="bg-white col-span-1 p-4 row-span-1 shadow-xl rounded">
+        <div className="bg-white dark:bg-gray-800 text-black dark:text-gray-200 col-span-1 p-4 row-span-1 shadow-xl rounded">
           <h3 className="font-bold text-xl">Additional Infos</h3>
           <Summary data={generateSummaryData()} />
         </div>
