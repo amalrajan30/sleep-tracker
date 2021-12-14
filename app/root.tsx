@@ -67,15 +67,84 @@ function Document({ children, title }: { children: React.ReactNode; title?: stri
   )
 }
 
+const useSystemPreference = () => {
+  const [isDarkMode, setIsDarkMode] = React.useState(false)
+  if (typeof window !== 'undefined') {
+    const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)')
+    React.useEffect(() => {
+      setIsDarkMode(prefersDarkMode.matches)
+      const handler = (e: MediaQueryListEvent) => {
+        e.matches ? setIsDarkMode(true) : setIsDarkMode(false)
+      }
+      prefersDarkMode.addListener(handler)
+      return () => prefersDarkMode.removeListener(handler)
+    }, [])
+  }
+  return isDarkMode
+}
+
+const useDarkMode = () => {
+  if (typeof window === 'undefined') {
+    return { theme: 'system', changeTheme: () => {} }
+  }
+  const [theme, setTheme] = React.useState(() => localStorage.getItem('theme') || 'system')
+
+  const preferDarkMode = useSystemPreference()
+
+  const enabled = theme === 'dark' || (theme === 'system' && preferDarkMode)
+
+  React.useEffect(() => {
+    if (typeof window !== 'undefined') {
+      if (enabled) {
+        document.documentElement.classList.add('dark')
+      } else {
+        document.documentElement.classList.remove('dark')
+      }
+    }
+  }, [enabled])
+
+  React.useEffect(() => {
+    if (theme === 'system') {
+      localStorage.removeItem('theme')
+    } else if (theme === 'dark') {
+      localStorage.theme = 'dark'
+    } else {
+      localStorage.theme = 'light'
+    }
+  }, [theme])
+
+  return { theme, changeTheme: setTheme }
+}
+
 function Layout({ children }: React.PropsWithChildren<{}>) {
+  const [mounted, setMounted] = React.useState(false)
   const data = useLoaderData()
+  const { theme, changeTheme } = useDarkMode()
+
+  React.useEffect(() => {
+    setMounted(true)
+  }, [])
   return (
-    <div className="flex overflow-hidden h-screen">
+    <div
+      style={{ visibility: mounted ? 'visible' : 'hidden' }}
+      className="flex overflow-hidden h-screen"
+    >
       <Sidebar />
       <div className="overflow-hidden h-full w-full">
-        <header className="flex justify-end items-center w-full h-12 pr-6 shadow-xl">
-          <span className="mr-4">
-            {/* <MdDarkMode className="w-6 overflow-hidden h-6 rounded-full" /> */}
+        <header className="flex justify-end items-center sticky w-full h-12 pr-6 shadow bg-white dark:bg-gray-800">
+          <span className="mr-4 flex items-baseline">
+            <label className="block text-gray-700 dark:text-gray-400 text-sm font-bold mr-2">
+              Theme:
+            </label>
+            <select
+              defaultValue={theme}
+              className="dark:bg-gray-800 dark:border-gray-700 text-gray-700 dark:text-gray-400"
+              onChange={(e) => changeTheme(e.target.value as 'system' | 'dark' | 'light')}
+            >
+              <option value="system">System</option>
+              <option value="light">Light</option>
+              <option value="dark">Dark</option>
+            </select>
           </span>
           <span className="w-7 overflow-hidden h-7 rounded-full mr-2">
             <img
@@ -87,11 +156,14 @@ function Layout({ children }: React.PropsWithChildren<{}>) {
               alt="avatar"
             />
           </span>
-          <span>
+          <span className="text-gray-900 dark:text-white">
             <p className="font-semibold">Guest</p>
           </span>
         </header>
-        <div className="bg-gray-200 p-6 overflow-y-scroll" style={{ height: 'calc(100% - 3rem)' }}>
+        <div
+          className="bg-gray-200 dark:bg-gray-900 p-6 overflow-y-scroll"
+          style={{ height: 'calc(100% - 3rem)' }}
+        >
           {children}
         </div>
       </div>

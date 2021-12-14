@@ -34,20 +34,26 @@ export default function NewEntry({ isOpen, onClose }: Props) {
   }, [sleepTime, wakeUpTime, overNight, date])
 
   return (
-    <Dialog aria-label="new entry form" className="rounded p-0" isOpen={isOpen} onDismiss={onClose}>
-      <div className="h-10 flex items-center justify-between border-b-2 p-8 border-gray-100">
+    <Dialog
+      aria-label="new entry form"
+      className="rounded p-0 bg-white dark:bg-gray-900"
+      isOpen={isOpen}
+      onDismiss={onClose}
+    >
+      <div className="h-10 flex items-center justify-between border-b-2 p-8 border-gray-100 dark:border-gray-700 text-gray-200 dark:bg-gray-900">
         <h1 className="font-bold text-xl">New Entry</h1>
         <button onClick={onClose}>
           <img src={closeIcon} width={16} />
         </button>
       </div>
-      <div className="p-8">
+      <div className="p-8 dark:bg-gray-900">
         <Form method="post">
           <InputGroup label="Date" name="date">
             <input
               type="date"
               required={true}
               name="date"
+              className="dark:bg-gray-400 dark:text-gray-700"
               onChange={(e) => setDate(e.target.value)}
               placeholder="Date"
             />
@@ -56,7 +62,7 @@ export default function NewEntry({ isOpen, onClose }: Props) {
             <input
               type="time"
               required={true}
-              className="w-full"
+              className="w-full dark:bg-gray-400"
               onChange={(e) => setSleepTime(e.target.value)}
               name="sleepTime"
               id="sleepTime"
@@ -68,7 +74,7 @@ export default function NewEntry({ isOpen, onClose }: Props) {
               required={true}
               disabled={!sleepTime}
               min={overNight ? '00:00' : sleepTime}
-              className="w-full"
+              className="w-full dark:bg-gray-400"
               onChange={(e) => setWakeUpTime(e.target.value)}
               name="wakeUpTime"
               id="wakeUpTime"
@@ -84,13 +90,22 @@ export default function NewEntry({ isOpen, onClose }: Props) {
                 setOverNight(e.target.checked ? 'on' : undefined)
               }}
             />
-            <label htmlFor="overnight" className="text-gray-700 text-sm font-bold ml-3">
+            <label
+              htmlFor="overnight"
+              className="text-gray-700 dark:text-gray-400 text-sm font-bold ml-3"
+            >
               Did you sleep overnight?
             </label>
           </div>
 
           <InputGroup label="Duration" name="duration">
-            <input type="text" name="duration" value={duration} disabled />
+            <input
+              type="text"
+              name="duration"
+              className="dark:bg-gray-400 dark:text-gray-700"
+              value={duration}
+              disabled
+            />
           </InputGroup>
 
           <input
@@ -131,7 +146,7 @@ const InputGroup = ({
   children: React.ReactNode
 }) => (
   <div className="flex flex-col justify-between mb-4">
-    <label htmlFor={name} className="text-gray-700 text-sm font-bold">
+    <label htmlFor={name} className="text-gray-700 dark:text-gray-400 text-sm font-bold">
       {label}
     </label>
     {children}
