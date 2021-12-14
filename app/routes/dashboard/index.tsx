@@ -155,7 +155,7 @@ export default function Dashboard() {
     return {
       avgSleepTime,
       avgWakeTime,
-      avgSleepDuration,
+      avgSleepDuration: avgSleepDuration.toFixed(2),
       daysLessThan6Hours,
       daysMoreThan8Hours,
     }
