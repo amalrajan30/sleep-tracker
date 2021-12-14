@@ -1,3 +1,35 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.dashboard {
+  display: grid;
+  grid-template-columns: auto;
+  grid-template-rows: 4rem repeat(auto-fit, minmax(4rem, 1fr));
+  grid-template-areas:
+    'title'
+    'table'
+    'graph'
+    'summary';
+  grid-gap: 1rem;
+}
+
+[data-reach-dialog-content] {
+  padding: 0 !important;
+  width: 90vw !important;
+}
+
+@media (min-width: 1025px) {
+  .dashboard {
+    grid-template-columns: 64% 1fr;
+    grid-template-rows: repeat(2, minmax(4rem, 1fr));
+    grid-template-areas:
+      'title title'
+      'table graph'
+      'table summary';
+  }
+
+  [data-reach-dialog-content] {
+    width: 50vw !important;
+  }
+}

@@ -5,7 +5,7 @@ export const Sidebar = () => {
     <>
       {/* compact sidebar */}
       {/* <!-- Component Start --> */}
-      <div className="flex lg:hidden flex-col items-center w-16 h-full overflow-hidden text-indigo-300 bg-indigo-900">
+      <div className="md:flex lg:hidden hidden flex-col items-center w-16 h-full overflow-hidden text-indigo-300 bg-indigo-900">
         <a className="flex items-center justify-center mt-3" href="#">
           <svg
             className="w-8 h-8 fill-current"

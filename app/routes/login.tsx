@@ -72,17 +72,13 @@ export default function Login() {
 
   return (
     <div className="h-full w-full flex">
-      <div className="h-screen w-1/2 flex flex-col justify-center items-center">
+      <div className="h-screen w-full lg:w-1/2 flex flex-col justify-center items-center">
         <div className="flex flex-col justify-center items-center">
           <h1 className="text-3xl font-bold">Login to Sleep Tracker</h1>
           <div
             id="g_id_onload"
             data-client_id="392175623992-p4bhp6iu6n5tm53lmitcg3s6gmgpb953.apps.googleusercontent.com"
           >
-            {/* <button className="g_id_signin bg-indigo-500 hover:bg-indigo-700 text-gray-500 font-semibold mt-12 py-2 px-4 rounded flex w-60 hover:bg-opacity-40 bg-opacity-40">
-            <FcGoogle className="mr-4" />
-            Login with Google
-          </button> */}
             <div
               className="g_id_signin mt-12"
               data-type="standard"
@@ -95,7 +91,7 @@ export default function Login() {
           </div>
         </div>
       </div>
-      <div className="bg-gray-100 h-screen w-1/2" />
+      <div className="hidden lg:block bg-gray-100 h-screen w-1/2" />
     </div>
   )
 }
