@@ -9,14 +9,20 @@ import {
   useCatch,
   useLocation,
   useLoaderData,
+  useSubmit,
 } from 'remix'
 import type { LinksFunction, LoaderFunction } from 'remix'
+import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button'
+import menuStyle from '@reach/menu-button/styles.css'
 import styles from './styles/app.css'
 import { Sidebar } from './components/sidebar'
 import { getUserSession } from './utils/session.server'
 
 export let links: LinksFunction = () => {
-  return [{ rel: 'stylesheet', href: styles }]
+  return [
+    { rel: 'stylesheet', href: styles },
+    { rel: 'stylesheet', href: menuStyle },
+  ]
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
@@ -120,10 +126,12 @@ function Layout({ children }: React.PropsWithChildren<{}>) {
   const [mounted, setMounted] = React.useState(false)
   const data = useLoaderData()
   const { theme, changeTheme } = useDarkMode()
+  const submit = useSubmit()
 
   React.useEffect(() => {
     setMounted(true)
   }, [])
+
   return (
     <div
       style={{ visibility: mounted ? 'visible' : 'hidden' }}
@@ -146,19 +154,28 @@ function Layout({ children }: React.PropsWithChildren<{}>) {
               <option value="dark">Dark</option>
             </select>
           </span>
-          <span className="w-7 overflow-hidden h-7 rounded-full mr-2">
-            <img
-              src={
-                data && data.avatar
-                  ? data.avatar
-                  : 'https://avatars.dicebear.com/api/adventurer/test.svg'
-              }
-              alt="avatar"
-            />
-          </span>
-          <span className="text-gray-900 dark:text-white">
-            <p className="font-semibold">Guest</p>
-          </span>
+          <Menu>
+            <span className="w-7 overflow-hidden h-7 rounded-full mr-2">
+              <img
+                src={
+                  data && data.avatar
+                    ? data.avatar
+                    : 'https://avatars.dicebear.com/api/adventurer/test.svg'
+                }
+                alt="avatar"
+              />
+            </span>
+            <MenuButton>
+              <span className="text-gray-900 dark:text-white">
+                <p className="font-semibold">{data.name}</p>
+              </span>
+            </MenuButton>
+            <MenuList>
+              <MenuItem onSelect={() => submit(null, { method: 'post', action: '/logout' })}>
+                Logout
+              </MenuItem>
+            </MenuList>
+          </Menu>
         </header>
         <div
           className="bg-gray-200 dark:bg-gray-900 p-6 overflow-y-scroll"
