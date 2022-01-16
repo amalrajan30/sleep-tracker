@@ -61,21 +61,24 @@ export default function Table({ data }: { data: TableData[] }) {
       </div>
       <div className="flex flex-col justify-between" style={{ height: 'calc(100% - 4rem)' }}>
         <table className="w-full" {...getTableProps()}>
-          <thead className="border-b-2 border-opacity-40 dark:border-gray-600 h-10">
+          <thead className="table w-full table-fixed border-b-2 border-opacity-40 dark:border-gray-600 h-10 pt-2">
             {headerGroups.map((headerGroup) => (
-              <tr className="text-gray-400 text-sm" {...headerGroup.getHeaderGroupProps()}>
+              <tr
+                className="table w-full table-fixed text-gray-400 text-sm"
+                {...headerGroup.getHeaderGroupProps()}
+              >
                 {headerGroup.headers.map((column) => (
                   <th {...column.getHeaderProps()}>{column.render('Header')}</th>
                 ))}
               </tr>
             ))}
           </thead>
-          <tbody {...getTableBodyProps()}>
+          <tbody className="block h-96 overflow-y-auto" {...getTableBodyProps()}>
             {page.map((row, i) => {
               prepareRow(row)
               return (
                 <tr
-                  className="h-11 border-b-2 border-opacity-40 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700"
+                  className="table w-full table-fixed h-11 border-b-2 border-opacity-40 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700"
                   {...row.getRowProps()}
                 >
                   {row.cells.map((cell) => {

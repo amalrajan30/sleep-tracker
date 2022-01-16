@@ -19,6 +19,12 @@
   width: 90vw !important;
 }
 
+thead tbody tr {
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+}
+
 @media (min-width: 1025px) {
   .dashboard {
     grid-template-columns: 64% 1fr;

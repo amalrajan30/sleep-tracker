@@ -1,7 +1,7 @@
 interface Summary {
   avgSleepTime: string
   avgWakeTime: string
-  avgSleepDuration: number
+  avgSleepDuration: number | string
   daysLessThan6Hours: number
   daysMoreThan8Hours: number
 }

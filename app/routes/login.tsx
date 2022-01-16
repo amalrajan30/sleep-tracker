@@ -1,7 +1,6 @@
 import * as React from 'react'
 import { useSubmit, redirect } from 'remix'
 import type { MetaFunction, ActionFunction, LoaderFunction } from 'remix'
-import { FcGoogle } from 'react-icons/fc'
 import jwtDecode from 'jwt-decode'
 import { createUser, setUserSession, getUserSession } from '~/utils/session.server'
 
