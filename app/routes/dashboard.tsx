@@ -1,4 +1,5 @@
-import { LinksFunction, ActionFunction, LoaderFunction, redirect, useLoaderData } from 'remix'
+import { redirect, useLoaderData } from 'remix'
+import type { LinksFunction, ActionFunction, LoaderFunction, MetaFunction } from 'remix'
 import * as React from 'react'
 import differenceInHours from 'date-fns/differenceInHours'
 import { zonedTimeToUtc, utcToZonedTime } from 'date-fns-tz'
@@ -9,8 +10,7 @@ import Table from '~/components/table'
 import NewEntry from '~/components/newEntry'
 import { getUserSession } from '~/utils/session.server'
 import { createSleepEntry, getSleepEntries } from '~/utils/sleepEntries.server'
-import addIcon from '../../icons/add.svg'
-import { da } from 'date-fns/locale'
+import addIcon from '../icons/add.svg'
 
 export const links: LinksFunction = () => [
   {
@@ -22,6 +22,10 @@ export const links: LinksFunction = () => [
     href: datepickerStyleHref,
   },
 ]
+
+export const meta: MetaFunction = () => ({
+  title: 'Dashboard',
+})
 
 export const action: ActionFunction = async ({ request }) => {
   const body = await request.formData()
